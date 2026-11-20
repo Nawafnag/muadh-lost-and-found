@@ -20,6 +20,13 @@ If an item is not ticked, it is marked **Missing** ❌ and shown on the
 your family first, and then you only see your own children (and only their missing items).
 Teachers see every student.
 
+**🤖 Smart assistant (AI):** after logging in, tap **Smart assistant** and ask a question
+in Arabic or English, for example "What is missing today?" or "Which item gets lost the most?".
+It answers from the app's data using Google's **Gemini** AI. A parent's question only
+includes their own children's data. The answers can sometimes be wrong, so check the screens.
+The secret Gemini key is never in this website: the app asks a small server
+(`worker/` on Cloudflare), and that server adds the key.
+
 **PINs (secret numbers):** every role needs a 4-digit PIN: each family, the entry teacher,
 the exit teacher and the **System admin**. The admin adds families, sets every PIN, and
 manages students and items. The first admin PIN is **1234**, so please change it.
@@ -51,6 +58,8 @@ Tap **ع / EN** at the top to switch between Arabic and English.
 | `js/items.js` | The ready-made items, colours and avatars. |
 | `js/store.js` | Saving and reading data (in the browser for now). |
 | `js/app.js` | The screens and the buttons. |
+| `js/assistant.js` | The smart assistant screen: it sends the question to the server. |
+| `worker/worker.js` | The small Cloudflare server that hides the Gemini key and asks Gemini. |
 
 Data is saved only in this browser on this device. Use fake names only.
 
@@ -71,6 +80,13 @@ Data is saved only in this browser on this device. Use fake names only.
 
 **العائلات:** كل طالب يتبع عائلة. عند الضغط على **وليّ الأمر** تختار عائلتك أولًا،
 ثم ترى أبناءك فقط (وأغراضهم المفقودة فقط). المعلّمون يرون كل الطلاب.
+
+**🤖 المساعد الذكي (ذكاء اصطناعي):** بعد تسجيل الدخول اضغط **المساعد الذكي** واكتب سؤالك
+بالعربية أو الإنجليزية، مثل «وش الأغراض المفقودة اليوم؟» أو «وش الغرض اللي يضيع أكثر شيء؟».
+يجيب من بيانات التطبيق باستخدام ذكاء **Gemini** من Google. سؤال وليّ الأمر يرسل بيانات
+أبنائه فقط. قد يخطئ أحيانًا، فتأكّد من الشاشات.
+المفتاح السري لـ Gemini ليس داخل الموقع أبدًا: التطبيق يسأل خادمًا صغيرًا
+(`worker/` على Cloudflare)، والخادم هو الذي يضيف المفتاح.
 
 **الأرقام السرية:** كل دور يحتاج رقمًا سريًا من 4 أرقام: كل عائلة، ومعلّم الدخول،
 ومعلّم الخروج، و**مدير النظام**. المدير يضيف العائلات ويجهّز كل الأرقام السرية،
@@ -103,6 +119,8 @@ Data is saved only in this browser on this device. Use fake names only.
 | `js/items.js` | الأغراض الجاهزة والألوان والصور الرمزية. |
 | `js/store.js` | حفظ البيانات وقراءتها (في المتصفح حاليًا). |
 | `js/app.js` | الشاشات والأزرار. |
+| `js/assistant.js` | شاشة المساعد الذكي: ترسل السؤال إلى الخادم. |
+| `worker/worker.js` | خادم Cloudflare الصغير الذي يخبّئ مفتاح Gemini ويسأله. |
 
 تُحفظ البيانات في هذا المتصفح على هذا الجهاز فقط. استخدم أسماء غير حقيقية.
 
