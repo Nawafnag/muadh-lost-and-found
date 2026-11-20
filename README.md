@@ -1,5 +1,7 @@
 # Muadh Lost and Found · مفقودات معاذ 🎒
 
+**▶️ جرّب التطبيق · Try it:** https://nawafnag.github.io/muadh-lost-and-found/
+
 ## English
 
 **What it does:** this app helps a student's things get home safely every day.
