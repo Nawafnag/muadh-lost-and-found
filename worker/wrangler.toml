@@ -1,0 +1,5 @@
+# The small Cloudflare server that hides the Gemini key.
+# The key itself is NOT here: it is saved in Cloudflare as the secret GEMINI_API_KEY.
+name = "muadh-assistant"
+main = "worker.js"
+compatibility_date = "2026-01-01"

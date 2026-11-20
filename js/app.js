@@ -50,6 +50,7 @@ const ACCESS = {
   teacherList: ['entry', 'exit'],
   dashboard: ['entry', 'exit', 'admin'],
   lostFound: ['parent', 'entry', 'exit', 'admin'],
+  assistant: ['parent', 'entry', 'exit', 'admin'],
   day: ['parent', 'entry', 'exit', 'admin'],
   admin: ['admin'], families: ['admin'], pins: ['admin'],
   students: ['admin'], items: ['admin'], settings: ['admin'],
@@ -307,6 +308,7 @@ Screens.home = function () {
   // The menu only shows what this role may open
   html += '<h3 class="section-title">' + t('more') + '</h3><div class="menu-grid">' +
     (currentRole() === 'admin' ? menuButton('admin', '🛠️', 'roleAdmin') : '') +
+    menuButton('assistant', '🤖', 'assistant') +
     menuButton('lostFound', '🔎', 'lostFound') +
     (isStaff() ? menuButton('dashboard', '📊', 'dashboard') : '') +
     menuButton('day', '📅', 'history') +

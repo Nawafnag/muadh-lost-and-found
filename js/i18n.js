@@ -232,6 +232,24 @@ const TEXTS = {
     entryShort: 'الدخول',
     exitShort: 'الخروج',
     homeShort: 'البيت',
+
+    // Smart assistant (Gemini)
+    assistant: 'المساعد الذكي',
+    assistantHint: 'اسألني عن أغراض الطلاب، وأجاوبك من بيانات النظام.',
+    assistantNote: 'يجاوب بالذكاء الاصطناعي (Gemini) وقد يخطئ أحياناً. تأكّد من الشاشات.',
+    askPlaceholder: 'اكتب سؤالك هنا…',
+    askLabel: 'سؤالك',
+    send: 'إرسال',
+    thinking: 'يفكّر…',
+    you: 'أنت',
+    helper: 'المساعد',
+    assistantError: 'ما قدرت أوصل للمساعد الحين. تأكّد من الإنترنت وجرّب مرة ثانية.',
+    assistantNoKey: 'المساعد لم يُجهَّز بعد (ينقصه مفتاح Gemini).',
+    assistantBusy: 'المساعد مشغول الحين، جرّب بعد دقيقة.',
+    clearChat: 'مسح المحادثة',
+    suggest1: 'وش الأغراض المفقودة اليوم؟',
+    suggest2: 'وين ضاع آخر غرض مفقود؟',
+    suggest3: 'وش الغرض اللي يضيع أكثر شيء؟',
   },
 
   en: {
@@ -460,6 +478,24 @@ const TEXTS = {
     entryShort: 'Entry',
     exitShort: 'Exit',
     homeShort: 'Home',
+
+    // Smart assistant (Gemini)
+    assistant: 'Smart assistant',
+    assistantHint: "Ask me about the students' belongings. I answer from the app's data.",
+    assistantNote: 'Answers come from AI (Gemini) and can sometimes be wrong. Check the screens.',
+    askPlaceholder: 'Type your question…',
+    askLabel: 'Your question',
+    send: 'Send',
+    thinking: 'Thinking…',
+    you: 'You',
+    helper: 'Assistant',
+    assistantError: 'I could not reach the assistant. Check the internet and try again.',
+    assistantNoKey: 'The assistant is not set up yet (the Gemini key is missing).',
+    assistantBusy: 'The assistant is busy right now. Try again in a minute.',
+    clearChat: 'Clear chat',
+    suggest1: 'What is missing today?',
+    suggest2: 'Where was the last missing item lost?',
+    suggest3: 'Which item gets lost the most?',
   },
 };
 

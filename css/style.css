@@ -489,3 +489,24 @@ input[type="text"], textarea, select {
 .dialog-buttons .btn { flex: 1; }
 .dialog-buttons.column { flex-direction: column; }
 .dialog-buttons .avatar { width: 36px; height: 36px; font-size: 1.3rem; }
+
+/* ---------- Smart assistant chat ---------- */
+.chat { display: flex; flex-direction: column; gap: 10px; margin-block: 8px 14px; }
+.chat-suggest { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 2px solid var(--primary); background: var(--primary-soft); color: var(--primary-dark);
+  border-radius: 999px; padding: 8px 14px; cursor: pointer; font-weight: 700;
+}
+.chip:hover { background: #fff; }
+.bubble {
+  display: flex; gap: 8px; align-items: flex-start; max-width: 92%;
+  padding: 10px 14px; border-radius: 18px; box-shadow: var(--shadow);
+}
+.bubble p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.bubble-who { font-size: 1.3rem; line-height: 1.2; }
+.bubble-me { align-self: flex-start; background: var(--primary-soft); border-end-start-radius: 4px; }
+.bubble-bot { align-self: flex-end; background: var(--card); border: 2px solid var(--line); border-end-end-radius: 4px; }
+.bubble-error { background: var(--red-bg); border-color: var(--red-strong); color: var(--red); }
+.chat-form { display: flex; gap: 8px; align-items: stretch; }
+.chat-input { flex: 1; min-width: 0; max-width: none; text-align: start; letter-spacing: normal; font-size: 1rem; }
+.chat-note { margin-block: 10px; }
