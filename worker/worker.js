@@ -56,15 +56,16 @@ export default {
 
     const question = String(input.question || '').slice(0, 500);
     const context = String(input.context || '').slice(0, 12000);
-    const lang = input.lang === 'en' ? 'English' : 'Arabic';
+    // Answer in the language of the question: Arabic letters → Arabic, otherwise English.
+    // (Tests showed Gemini sometimes answered an English question in Arabic.)
+    const lang = /[\u0600-\u06FF]/.test(question) ? 'Arabic' : 'English';
     if (!question.trim()) return reply({ error: 'empty' }, 400, origin);
 
     const body = JSON.stringify({
       systemInstruction: { parts: [{ text: RULES }] },
       contents: [{
         role: 'user',
-        parts: [{ text: 'App data:\n' + context + '\n\nAnswer in the same language as the question ' +
-          '(if unclear, use ' + lang + ').\nQuestion: ' + question }],
+        parts: [{ text: 'App data:\n' + context + '\n\nYou MUST answer in ' + lang + '.\nQuestion: ' + question }],
       }],
       generationConfig: { temperature: 0.3, maxOutputTokens: 1024 },
     });
