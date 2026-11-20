@@ -28,7 +28,12 @@ const STEP_NAMES = ['home morning (packed)', 'school entry', 'school exit', 'hom
 function assistantContext() {
   const students = myStudents();
   const ids = students.map(s => s.id);
-  const lines = ['Today is ' + today() + '.', 'Person asking: ' + roleText() + '.', '', 'Students:'];
+  const lines = ['Today is ' + today() + '.', 'Person asking: ' + roleText() + '.'];
+  // The screen open behind the chat, so "this item" or "this child" makes sense
+  const screen = currentScreen();
+  const shown = screen.params && screen.params.sid ? Store.getStudent(screen.params.sid) : null;
+  lines.push('Screen open now: ' + screen.name + (shown && canSee(shown) ? ' (about ' + shown.nameEn + ')' : '') + '.');
+  lines.push('', 'Students:');
 
   students.forEach(function (s) {
     const family = s.parentId ? Store.getParent(s.parentId) : null;
@@ -68,13 +73,53 @@ function assistantContext() {
   return lines.join('\n');
 }
 
-// ----- 2. The screen -----
-Screens.assistant = function () {
-  const messages = chatMessages();
-  let html = screenTitle('🤖', t('assistant')) +
-    '<p class="hint">' + esc(t('assistantHint')) + '</p>';
+// ----- 2. The floating chat (on every screen, after logging in) -----
+let chatOpen = false;
 
-  html += '<div class="chat" id="chatLog" aria-live="polite">';
+// Add the round 🤖 button and the chat panel to the page once
+document.body.insertAdjacentHTML('beforeend',
+  '<button id="chatFab" class="chat-fab" type="button" onclick="openChat()" hidden>' +
+  '<span aria-hidden="true">🤖</span> <span id="chatFabText"></span></button>' +
+  '<section id="chatPanel" class="chat-panel" role="dialog" aria-labelledby="chatTitle" hidden>' +
+  '<div class="chat-head"><h2 id="chatTitle" class="chat-title"></h2>' +
+  '<button id="chatClose" class="chat-close" type="button" onclick="closeChat()">✕</button></div>' +
+  '<div id="chatBody" class="chat-body"></div></section>');
+
+function openChat() {
+  chatOpen = true;
+  updateChatUi();
+  const box = document.getElementById('askBox');
+  if (box) box.focus();
+}
+
+function closeChat() {
+  chatOpen = false;
+  updateChatUi();
+  document.getElementById('chatFab').focus();
+}
+
+// Show or hide the button and the panel, in the current language
+function updateChatUi() {
+  const loggedIn = !!currentRole();
+  if (!loggedIn) chatOpen = false;
+  const fab = document.getElementById('chatFab');
+  fab.hidden = !loggedIn || chatOpen;
+  document.getElementById('chatFabText').textContent = t('assistant');
+  document.getElementById('chatPanel').hidden = !chatOpen;
+  document.getElementById('chatTitle').textContent = '🤖 ' + t('assistant');
+  document.getElementById('chatClose').setAttribute('aria-label', t('closeChat'));
+  if (chatOpen) drawChat();
+}
+
+// Draw the messages, keeping anything already typed in the box
+function drawChat() {
+  const oldBox = document.getElementById('askBox');
+  const typed = oldBox ? oldBox.value : '';
+  const hadFocus = oldBox && document.activeElement === oldBox;
+  const messages = chatMessages();
+
+  let html = '<p class="hint">' + esc(t('assistantHint')) + '</p>' +
+    '<div class="chat" id="chatLog" aria-live="polite">';
   if (!messages.length) {
     html += '<div class="chat-suggest">' +
       ['suggest1', 'suggest2', 'suggest3'].map(key =>
@@ -98,33 +143,50 @@ Screens.assistant = function () {
     '<input id="askBox" class="pin-input chat-input" type="text" maxlength="300" autocomplete="off" dir="auto" ' +
     'placeholder="' + esc(t('askPlaceholder')) + '"' + (chat.busy ? ' disabled' : '') + '>' +
     '<button class="btn btn-primary" type="submit"' + (chat.busy ? ' disabled' : '') + '>' + esc(t('send')) + '</button>' +
-    '</form>';
+    '</form>' +
+    '<div class="row-between chat-foot"><p class="muted chat-note">ℹ️ ' + esc(t('assistantNote')) + '</p>' +
+    (messages.length && !chat.busy ? '<button class="btn btn-light btn-small" type="button" onclick="clearChat()">🧹 ' +
+      esc(t('clearChat')) + '</button>' : '') + '</div>';
 
-  html += '<p class="muted chat-note">ℹ️ ' + esc(t('assistantNote')) + '</p>';
-  if (messages.length && !chat.busy) {
-    html += '<div class="button-row center"><button class="btn btn-light btn-small" onclick="clearChat()">🧹 ' +
-      esc(t('clearChat')) + '</button></div>';
-  }
-  return html;
-};
+  const body = document.getElementById('chatBody');
+  body.innerHTML = html;
+  const box = document.getElementById('askBox');
+  box.value = typed;
+  if (hadFocus && !chat.busy) box.focus({ preventScroll: true });
+  body.scrollTop = body.scrollHeight; // newest message in view
+}
 
 function sendQuestion(event) {
   event.preventDefault();
   const box = document.getElementById('askBox');
-  askAssistant(box ? box.value : '');
+  const question = box ? box.value : '';
+  if (box) box.value = '';
+  askAssistant(question);
 }
 
-function clearChat() { chatMessages().length = 0; render(false); }
+function clearChat() { chatMessages().length = 0; drawChat(); document.getElementById('askBox').focus(); }
 
-// Draw the chat again, keep the newest message in view and the cursor in the box
+// Draw the chat again after a new message, with the cursor back in the box
 function redrawChat() {
-  if (currentScreen().name !== 'assistant') return;
-  render(false);
-  const log = document.getElementById('chatLog');
-  if (log && log.lastElementChild) log.lastElementChild.scrollIntoView({ block: 'nearest' });
+  if (!chatOpen) return;
+  drawChat();
   const box = document.getElementById('askBox');
   if (box && !chat.busy) box.focus({ preventScroll: true });
 }
+
+// Every time a screen is drawn (new screen, language, login, logout), update the chat too
+const drawScreen = render;
+render = function (goToTop) {
+  drawScreen(goToTop);
+  updateChatUi();
+};
+
+// Escape closes the chat
+document.addEventListener('keydown', function (event) {
+  if (event.key === 'Escape' && chatOpen) closeChat();
+});
+
+updateChatUi();
 
 // ----- 3. Asking Gemini (through our server) -----
 async function askAssistant(question) {

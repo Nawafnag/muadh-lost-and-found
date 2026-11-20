@@ -23,7 +23,7 @@ and teachers post found items on a Lost & Found board.
 - Answer ONLY from the app data you are given. If the data does not say, say you do not know.
 - Never invent students, items or dates.
 - Keep answers short (1-4 sentences), simple and friendly, for parents, teachers and children.
-- Answer in the language requested. In Arabic, write names in Arabic letters only
+- Answer in the same language the question is written in. In Arabic, write names in Arabic letters only
   (use the Arabic name from the data, e.g. سارة), never mix in other alphabets.
 - Only talk about the app and school belongings. Politely refuse other topics.`;
 
@@ -63,7 +63,8 @@ export default {
       systemInstruction: { parts: [{ text: RULES }] },
       contents: [{
         role: 'user',
-        parts: [{ text: 'App data:\n' + context + '\n\nAnswer in ' + lang + '.\nQuestion: ' + question }],
+        parts: [{ text: 'App data:\n' + context + '\n\nAnswer in the same language as the question ' +
+          '(if unclear, use ' + lang + ').\nQuestion: ' + question }],
       }],
       generationConfig: { temperature: 0.3, maxOutputTokens: 1024 },
     });
