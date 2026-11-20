@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- Muadh Lost and Found / مفقودات معاذ
+     All the words come from js/i18n.js, so this page has no text of its own. -->
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎒</text></svg>">
+
+  <!-- The Tajawal font (Arabic + English). If there is no internet, a system font is used. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- The header: back button, app name, language button -->
+  <header class="topbar">
+    <button id="backBtn" class="back-btn" type="button" onclick="back()">
+      <span class="flip" aria-hidden="true">←</span>
+      <span id="backText"></span>
+    </button>
+    <h1 class="app-title-wrap">
+      <button id="appTitle" class="app-title" type="button" onclick="goHome()"></button>
+    </h1>
+    <button id="langBtn" class="lang-btn" type="button" onclick="toggleLanguage()"></button>
+  </header>
+
+  <!-- The screens are drawn here by js/app.js -->
+  <main id="app"></main>
+
+  <!-- Copyright line, filled in by js/app.js in the chosen language -->
+  <footer id="appFooter" class="app-footer"></footer>
+
+  <!-- Space for the "Are you sure?" dialog and for short messages -->
+  <div id="dialogRoot"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- The order matters: store first, app last -->
+  <script src="js/store.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/items.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

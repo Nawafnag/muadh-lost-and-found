@@ -1,0 +1,3 @@
+# Files the Mac or the editor makes by itself
+.DS_Store
+.claude/
