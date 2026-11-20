@@ -44,6 +44,7 @@ function newRecord() {
 }
 
 const Store = (function () {
+  let firstVisit = false; // true when this device has never opened the app
   let data = load();
 
   // Read the notebook from the browser
@@ -54,6 +55,7 @@ const Store = (function () {
     } catch (error) {
       // If something goes wrong, we just start with an empty notebook
     }
+    firstVisit = true;
     return emptyData();
   }
 
@@ -67,7 +69,7 @@ const Store = (function () {
     }
   }
 
-  return {
+  const api = {
     // ----- Language -----
     getLang() { return data.lang; },
     setLang(lang) { data.lang = lang; save(); },
@@ -271,4 +273,10 @@ const Store = (function () {
       save();
     },
   };
+
+  // The very first time the app opens on a device, fill it with demo data,
+  // so it is ready to try straight away. (After "Reset all data" it stays empty.)
+  if (firstVisit) api.loadDemo();
+
+  return api;
 })();
